@@ -2,12 +2,19 @@ require_relative 'pay_with_me/version'
 
 # models
 require_relative 'pay_with_me/models/balance'
+require_relative 'pay_with_me/models/config'
+
+# services
+require_relative 'pay_with_me/services/configurator'
 
 module PayWithMe
   # key here is the shorthand which will be used by users of the gem
   # value is the module name for the payment system
   SUPPORTED_SYSTEMS = {
-      :perfect_money => :PerfectMoney
+      :perfect_money => {
+          :module          => :PerfectMoney,
+          :allowed_options => %i( account_id password )
+      }
   }
 
   def self.supported?(payment_system)
@@ -18,4 +25,21 @@ module PayWithMe
   def self.supported_systems
     @supported_sytems ||= SUPPORTED_SYSTEMS.keys
   end
+
+  def self.allowed_options
+    @allowed_options ||= SUPPORTED_SYSTEMS.inject({}) do |memo, (system, options)|
+      memo.merge!(system => options[:allowed_options])
+    end
+  end
+
+  def self.config(&block)
+    @configs = Configurator.make_configs(supported_systems, allowed_options, &block)
+  end
+
+  def self.config_for(payment_system)
+    @configs[payment_system.to_sym]
+  end
+
+  class UnsupportedPaymentSystem < NameError; end
+  class UnsupportedConfigurationOption < NameError; end
 end
