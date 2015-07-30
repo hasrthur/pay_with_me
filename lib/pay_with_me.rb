@@ -1,5 +1,8 @@
 require_relative 'pay_with_me/version'
 
+# models
+require_relative 'pay_with_me/models/balance'
+
 module PayWithMe
   # key here is the shorthand which will be used by users of the gem
   # value is the module name for the payment system
