@@ -9,6 +9,10 @@ module PayWithMe
       use!('BalanceRetriever').retrieve
     end
 
+    def transfer(options = {})
+      use!('Transferer').transfer(options)
+    end
+
     private
 
     def use!(name)
