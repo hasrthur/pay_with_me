@@ -7,6 +7,7 @@ require_relative 'pay_with_me/version'
 require_relative 'pay_with_me/models/response'
 require_relative 'pay_with_me/models/balance'
 require_relative 'pay_with_me/models/config'
+require_relative 'pay_with_me/models/transfer'
 
 require_relative 'pay_with_me/payment_system'
 
