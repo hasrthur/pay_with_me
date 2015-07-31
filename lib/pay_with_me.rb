@@ -14,7 +14,11 @@ require_relative 'pay_with_me/payment_system'
 # services
 require_relative 'pay_with_me/services/configurator'
 
+# PerfectMoney
 require_relative 'pay_with_me/payment_systems/perfect_money/api/balance_retriever'
+require_relative 'pay_with_me/payment_systems/perfect_money/api/transferer'
+
+require_relative 'pay_with_me/payment_systems/perfect_money/models/transfer'
 
 module PayWithMe
   # key here is the shorthand which will be used by users of the gem
@@ -22,7 +26,7 @@ module PayWithMe
   SUPPORTED_SYSTEMS = {
       :perfect_money => {
           :module          => :PerfectMoney,
-          :allowed_options => %i( account_id password )
+          :allowed_options => %i( account_id password payer )
       }
   }
 

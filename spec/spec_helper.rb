@@ -13,3 +13,10 @@ RSpec.configure do |config|
   config.filter_run :focus
   config.order = 'random'
 end
+
+PayWithMe.config do |c|
+  c.configure :perfect_money do |pm|
+    pm.account_id 42
+    pm.password 'password'
+  end
+end

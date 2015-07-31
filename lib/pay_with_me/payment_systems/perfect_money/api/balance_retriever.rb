@@ -10,7 +10,7 @@ module PayWithMe
           end
 
           def retrieve
-            Models::Balance.new do |b|
+            PayWithMe::Models::Balance.new do |b|
               if error = nokogiri_doc.at_xpath('//input[@name="ERROR"]/@value')
                 b.error! error.value
               else

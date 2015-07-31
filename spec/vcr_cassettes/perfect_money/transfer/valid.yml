@@ -1,0 +1,71 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://perfectmoney.is/acct/confirm.asp
+    body:
+      encoding: US-ASCII
+      string: AccountID=42&PassPhrase=password&Payer_Account=U9999999&Payee_Account=U9999999&Amount=0.01&Memo=somememo&PAYMENT_ID=42
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - perfectmoney.is
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 31 Jul 2015 22:39:33 GMT
+      Content-Type:
+      - text/html; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - timeout=60
+      X-Frame-Options:
+      - DENY
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <html>
+
+        <head>
+          <title>Spend</title>
+        </head>
+
+        <body>
+
+        <h1>Spend</h1>
+
+        <table border=1>
+        <tr><td><b>Name</b></td><td><b>Value</b></td></tr><tr><td>Payee_Account_Name</td><td>Best PM account</td></tr>
+        <tr><td>Payee_Account</td><td>U9999999</td></tr>
+        <tr><td>Payer_Account</td><td>U9999999</td></tr>
+        <tr><td>PAYMENT_AMOUNT</td><td>0.01</td></tr>
+        <tr><td>PAYMENT_BATCH_NUM</td><td>96352921</td></tr>
+        <tr><td>PAYMENT_ID</td><td>42</td></tr>
+        </table>
+        <input name='Payee_Account_Name' type='hidden' value='Best PM account'>
+        <input name='Payee_Account' type='hidden' value='U9999999'>
+        <input name='Payer_Account' type='hidden' value='U9999999'>
+        <input name='PAYMENT_AMOUNT' type='hidden' value='0.01'>
+        <input name='PAYMENT_BATCH_NUM' type='hidden' value='96352921'>
+        <input name='PAYMENT_ID' type='hidden' value='42'>
+        </body>
+
+        </html>
+    http_version:
+  recorded_at: Fri, 31 Jul 2015 19:56:49 GMT
+recorded_with: VCR 2.9.3

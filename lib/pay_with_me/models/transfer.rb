@@ -20,6 +20,7 @@ module PayWithMe
         payment_amount
         transaction_id
         payment_id
+        amount
       ).each do |attr|
         define_attr_methods_for attr
       end

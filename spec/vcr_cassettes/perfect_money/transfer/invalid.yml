@@ -1,11 +1,11 @@
 ---
 http_interactions:
 - request:
-    method: get
-    uri: https://perfectmoney.is/acct/balance.asp?AccountID=42&PassPhrase=password
+    method: post
+    uri: https://perfectmoney.is/acct/confirm.asp
     body:
       encoding: US-ASCII
-      string: ''
+      string: AccountID=7148613&PassPhrase=6-Y216-560r%22_641&Payer_Account=U9997283&Payee_Account=42&Amount=-442&Memo=Some+memo&PAYMENT_ID=4342&code&Period
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -15,6 +15,8 @@ http_interactions:
       - Ruby
       Host:
       - perfectmoney.is
+      Content-Type:
+      - application/x-www-form-urlencoded
   response:
     status:
       code: 200
@@ -23,7 +25,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Fri, 31 Jul 2015 19:21:08 GMT
+      - Fri, 31 Jul 2015 22:05:53 GMT
       Content-Type:
       - text/html; charset=UTF-8
       Transfer-Encoding:
@@ -38,21 +40,20 @@ http_interactions:
       encoding: ASCII-8BIT
       string: |-
         <html>
+
         <head>
-          <title>Balance</title>
+          <title>Spend</title>
         </head>
+
         <body>
-        <h1>Balance</h1>
-        <table border=1>
-        <tr><td><b>Account No.</b></td><td><b>Balance</b></td></tr><tr><td>U999999</td><td>10.00</td></tr>
-        <tr><td>E9999999</td><td>0.00</td></tr>
-        <tr><td>G9999999</td><td>0.00</td></tr>
-        </table>
-        <input name='U9999999' type='hidden' value='10.00'>
-        <input name='E9999999' type='hidden' value='8.57'>
-        <input name='G9999999' type='hidden' value='7.13'>
+
+        <h1>Spend</h1>
+
+        Error: Invalid Amount
+        <input name='ERROR' type='hidden' value='Invalid Amount'>
         </body>
+
         </html>
-    http_version:
-  recorded_at: Fri, 31 Jul 2015 16:38:23 GMT
+    http_version: 
+  recorded_at: Fri, 31 Jul 2015 19:23:09 GMT
 recorded_with: VCR 2.9.3

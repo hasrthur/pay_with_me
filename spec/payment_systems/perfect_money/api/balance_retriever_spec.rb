@@ -1,15 +1,6 @@
 describe PayWithMe::PaymentSystems::PerfectMoney::Api::BalanceRetriever do
   subject(:balance) { PayWithMe.using(:perfect_money).balance }
 
-  before do
-    PayWithMe.config do |c|
-      c.configure :perfect_money do |pm|
-        pm.account_id 42
-        pm.password 'password'
-      end
-    end
-  end
-
   context 'valid request', vcr: {cassette_name: 'perfect_money/balance/valid'} do
     it { is_expected.to be_ok }
 
