@@ -4,6 +4,10 @@ require_relative 'pay_with_me/version'
 require_relative 'pay_with_me/models/balance'
 require_relative 'pay_with_me/models/config'
 
+require_relative 'pay_with_me/payment_systems/base'
+
+require_relative 'pay_with_me/payment_systems/perfect_money'
+
 # services
 require_relative 'pay_with_me/services/configurator'
 
@@ -38,6 +42,16 @@ module PayWithMe
 
   def self.config_for(payment_system)
     @configs[payment_system.to_sym]
+  end
+
+  def self.using(payment_system)
+    unless SUPPORTED_SYSTEMS.key?(payment_system)
+      raise UnsupportedPaymentSystem, "Trying to use unsupported payment system #{ payment_system  }"
+    end
+
+    Object.const_get("PayWithMe::PaymentSystems::#{ SUPPORTED_SYSTEMS[payment_system][:module] }").new.tap do |ps|
+      yield ps if block_given?
+    end
   end
 
   class UnsupportedPaymentSystem < NameError; end

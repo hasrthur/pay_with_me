@@ -48,4 +48,20 @@ describe PayWithMe do
       end.to raise_error PayWithMe::UnsupportedConfigurationOption, /dumb_option/
     end
   end
+
+  fdescribe '.using' do
+    it 'raises error if trying to use unsupported payment system' do
+      expect do
+        PayWithMe.using :liberty_reserve
+      end.to raise_error PayWithMe::UnsupportedPaymentSystem, /liberty_reserve/
+    end
+
+    it 'returns the payment system object' do
+      expect(PayWithMe.using(:perfect_money)).to be_kind_of PayWithMe::PaymentSystems::Base
+    end
+
+    it 'allows to use block with payment system passed as argument' do
+      expect {|b| PayWithMe.using(:perfect_money, &b) }.to yield_with_args PayWithMe::PaymentSystems::PerfectMoney
+    end
+  end
 end
