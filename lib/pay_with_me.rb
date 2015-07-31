@@ -1,6 +1,7 @@
 require_relative 'pay_with_me/version'
 
 # models
+require_relative 'pay_with_me/models/response'
 require_relative 'pay_with_me/models/balance'
 require_relative 'pay_with_me/models/config'
 

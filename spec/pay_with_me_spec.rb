@@ -49,7 +49,7 @@ describe PayWithMe do
     end
   end
 
-  fdescribe '.using' do
+  describe '.using' do
     it 'raises error if trying to use unsupported payment system' do
       expect do
         PayWithMe.using :liberty_reserve
