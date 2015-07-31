@@ -7,9 +7,9 @@ describe PayWithMe::Models::Balance do
   subject(:balance) do
     acc_1, bal_1 = account_1, balance_1
     acc_2, bal_2 = account_2, balance_2
-    described_class.new do
-      account acc_1, with_balance: bal_1
-      account acc_2, with_balance: bal_2
+    described_class.new do |b|
+      b.account acc_1, with_balance: bal_1
+      b.account acc_2, with_balance: bal_2
     end
   end
 

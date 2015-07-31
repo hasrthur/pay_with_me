@@ -1,0 +1,52 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://perfectmoney.is/acct/balance.asp?AccountID=42&PassPhrase=password
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - perfectmoney.is
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 31 Jul 2015 18:07:19 GMT
+      Content-Type:
+      - text/html; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - timeout=60
+      X-Frame-Options:
+      - DENY
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <html>
+        <head>
+          <title>Balance</title>
+        </head>
+        <body>
+        <h1>Balance</h1>
+        Error: Can not login with passed AccountID and PassPhrase
+        <input name='ERROR' type='hidden' value='Can not login with passed AccountID and PassPhrase'>
+        </body>
+        </html>
+    http_version: 
+  recorded_at: Fri, 31 Jul 2015 15:24:34 GMT
+recorded_with: VCR 2.9.3

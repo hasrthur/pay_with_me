@@ -9,8 +9,8 @@ module PayWithMe
       @allowed_options = allowed_options
     end
 
-    def make_configs(&block)
-      instance_exec(&block)
+    def make_configs
+      yield self
 
       configs_hash
     end
@@ -18,8 +18,6 @@ module PayWithMe
     def configs_hash
       @configs_hash ||= {}
     end
-
-    private
 
     def configure(payment_system, &block)
       payment_system = payment_system.to_sym

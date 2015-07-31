@@ -1,0 +1,58 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://perfectmoney.is/acct/balance.asp?AccountID=42&PassPhrase=password
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - perfectmoney.is
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 31 Jul 2015 19:21:08 GMT
+      Content-Type:
+      - text/html; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - timeout=60
+      X-Frame-Options:
+      - DENY
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <html>
+        <head>
+          <title>Balance</title>
+        </head>
+        <body>
+        <h1>Balance</h1>
+        <table border=1>
+        <tr><td><b>Account No.</b></td><td><b>Balance</b></td></tr><tr><td>U9997283</td><td>10.00</td></tr>
+        <tr><td>E9007311</td><td>0.00</td></tr>
+        <tr><td>G9355630</td><td>0.00</td></tr>
+        </table>
+        <input name='U9999999' type='hidden' value='10.00'>
+        <input name='E9999999' type='hidden' value='8.57'>
+        <input name='G9999999' type='hidden' value='7.13'>
+        </body>
+        </html>
+    http_version:
+  recorded_at: Fri, 31 Jul 2015 16:38:23 GMT
+recorded_with: VCR 2.9.3

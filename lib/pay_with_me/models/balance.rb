@@ -1,9 +1,9 @@
 module PayWithMe
   module Models
-    class Balance
-      def initialize(&block)
+    class Balance < Response
+      def initialize
         @accounts = {}
-        instance_exec &block
+        yield self
       end
 
       def accounts
@@ -21,8 +21,6 @@ module PayWithMe
       def balance
         @accounts.values.first
       end
-
-      private
 
       def account(account_number, with_balance: 0.0)
         @accounts[account_number] = with_balance

@@ -15,10 +15,10 @@ describe PayWithMe do
 
   describe '.config' do
     it 'allows to configure the gem with the help of code' do
-      PayWithMe.config do
-        configure :perfect_money do
-          account_id 42
-          password 'password'
+      PayWithMe.config do |c|
+        c.configure :perfect_money do |pm|
+          pm.account_id 42
+          pm.password 'password'
         end
       end
 
@@ -30,9 +30,9 @@ describe PayWithMe do
 
     it 'throws exception when trying to configure unsupported payment system' do
       expect do
-        PayWithMe.config do
-          configure :liberty_reserve do
-            account_id 42
+        PayWithMe.config do |c|
+          c.configure :liberty_reserve do |lr|
+            lr.account_id 42
           end
         end
       end.to raise_error PayWithMe::UnsupportedPaymentSystem, /liberty_reserve/
@@ -40,9 +40,9 @@ describe PayWithMe do
 
     it 'throws exception when trying to set property which is not supported' do
       expect do
-        PayWithMe.config do
-          configure :perfect_money do
-            dumb_option 42
+        PayWithMe.config do |c|
+          c.configure :perfect_money do |pm|
+            pm.dumb_option 42
           end
         end
       end.to raise_error PayWithMe::UnsupportedConfigurationOption, /dumb_option/
@@ -57,11 +57,11 @@ describe PayWithMe do
     end
 
     it 'returns the payment system object' do
-      expect(PayWithMe.using(:perfect_money)).to be_kind_of PayWithMe::PaymentSystems::Base
+      expect(PayWithMe.using(:perfect_money)).to be_kind_of PayWithMe::PaymentSystem
     end
 
     it 'allows to use block with payment system passed as argument' do
-      expect {|b| PayWithMe.using(:perfect_money, &b) }.to yield_with_args PayWithMe::PaymentSystems::PerfectMoney
+      expect {|b| PayWithMe.using(:perfect_money, &b) }.to yield_with_args PayWithMe::PaymentSystem
     end
   end
 end

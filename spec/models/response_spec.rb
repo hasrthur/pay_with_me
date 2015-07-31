@@ -18,7 +18,7 @@ describe PayWithMe::Models::Response do
   end
 
   describe '#failed?' do
-    before { response.error = 'Some error' }
+    before { response.error! 'Some error' }
     subject { response.failed? }
 
     it { is_expected.to be true }

@@ -1,7 +1,11 @@
 module PayWithMe
   module Models
     class Response
-      attr_accessor :error
+      attr_reader :error
+
+      def error!(error)
+        @error = error
+      end
 
       def succeed?
         error.nil?.tap do |success|

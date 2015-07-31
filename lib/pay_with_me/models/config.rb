@@ -10,6 +10,10 @@ module PayWithMe
           @hash ||= {}
         end
 
+        def configure
+          yield self
+        end
+
         def method_missing(name, value)
           unless @allowed_options.include? name
             raise UnsupportedConfigurationOption, "Unsupported configuration option `#{ name }`"
@@ -21,7 +25,7 @@ module PayWithMe
 
       def self.create(allowed_options, &block)
         dummy = Dummy.new(allowed_options)
-        dummy.instance_exec &block
+        dummy.configure &block
 
         new(dummy.hash)
       end

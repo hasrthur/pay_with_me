@@ -4,8 +4,8 @@ describe PayWithMe::Models::Config do
   subject(:config) { described_class.new(config_hash) }
 
   it 'can be created with the help of block' do
-    config = described_class.create %i( option_2 ) do
-      option_2 'option_2'
+    config = described_class.create %i( option_2 ) do |c|
+      c.option_2 'option_2'
     end
 
     expect(config.option_2).to eq 'option_2'

@@ -1,3 +1,6 @@
+require 'net/http'
+require 'nokogiri'
+
 require_relative 'pay_with_me/version'
 
 # models
@@ -5,12 +8,12 @@ require_relative 'pay_with_me/models/response'
 require_relative 'pay_with_me/models/balance'
 require_relative 'pay_with_me/models/config'
 
-require_relative 'pay_with_me/payment_systems/base'
-
-require_relative 'pay_with_me/payment_systems/perfect_money'
+require_relative 'pay_with_me/payment_system'
 
 # services
 require_relative 'pay_with_me/services/configurator'
+
+require_relative 'pay_with_me/payment_systems/perfect_money/api/balance_retriever'
 
 module PayWithMe
   # key here is the shorthand which will be used by users of the gem
@@ -21,6 +24,8 @@ module PayWithMe
           :allowed_options => %i( account_id password )
       }
   }
+
+  @configs = {}
 
   def self.supported?(payment_system)
     supported_systems.include?(payment_system.to_sym)
@@ -42,7 +47,14 @@ module PayWithMe
   end
 
   def self.config_for(payment_system)
-    @configs[payment_system.to_sym]
+    return @configs[payment_system] if @configs.key? payment_system
+
+    allowed_options = SUPPORTED_SYSTEMS[payment_system][:allowed_options]
+    Models::Config.create(allowed_options) do |c|
+      allowed_options.each do |option|
+        c.send option, nil
+      end
+    end
   end
 
   def self.using(payment_system)
@@ -50,7 +62,7 @@ module PayWithMe
       raise UnsupportedPaymentSystem, "Trying to use unsupported payment system #{ payment_system  }"
     end
 
-    Object.const_get("PayWithMe::PaymentSystems::#{ SUPPORTED_SYSTEMS[payment_system][:module] }").new.tap do |ps|
+    PaymentSystem.new(SUPPORTED_SYSTEMS[payment_system][:module], config_for(payment_system)).tap do |ps|
       yield ps if block_given?
     end
   end
