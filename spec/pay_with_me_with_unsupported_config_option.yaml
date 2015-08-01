@@ -1,0 +1,6 @@
+---
+perfect_money:
+  account_id: 12345
+  password: password-1
+  payer: U123456
+  unsupported_option: some option

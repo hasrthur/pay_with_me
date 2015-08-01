@@ -64,4 +64,39 @@ describe PayWithMe do
       expect {|b| PayWithMe.using(:perfect_money, &b) }.to yield_with_args PayWithMe::PaymentSystem
     end
   end
+
+  describe '.config_path=' do
+    context 'valid yaml file' do
+      let(:config_path) { File.expand_path('pay_with_me.yaml', File.dirname(__FILE__)) }
+      let(:yaml) { YAML.load_file(config_path) }
+
+      it 'sets the config from .yaml file' do
+        PayWithMe.config_path = config_path
+
+        PayWithMe.config_for(:perfect_money).tap do |config|
+          expect(config.account_id).to eq yaml['perfect_money']['account_id']
+          expect(config.password).to eq yaml['perfect_money']['password']
+          expect(config.payer).to eq yaml['perfect_money']['payer']
+        end
+      end
+    end
+
+    context 'invalid yaml file' do
+      context 'with unsupported payment system' do
+        let(:config_path) { File.expand_path('pay_with_me_with_unsupported_payment_system.yaml', File.dirname(__FILE__)) }
+
+        it 'raises UnsupportedPaymentSystem' do
+          expect { PayWithMe.config_path = config_path }.to raise_error PayWithMe::UnsupportedPaymentSystem, /liberty_reserve/
+        end
+      end
+
+      context 'with unsupported config option' do
+        let(:config_path) { File.expand_path('pay_with_me_with_unsupported_config_option.yaml', File.dirname(__FILE__)) }
+
+        it 'raises UnsupportedConfigurationOption' do
+          expect { PayWithMe.config_path = config_path }.to raise_error PayWithMe::UnsupportedConfigurationOption, /unsupported_option/
+        end
+      end
+    end
+  end
 end

@@ -1,0 +1,7 @@
+---
+perfect_money:
+  account_id: 12345
+  password: password-1
+  payer: U123456
+liberty_reserve:
+  account_id: 14

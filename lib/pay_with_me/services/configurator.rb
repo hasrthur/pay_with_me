@@ -4,6 +4,19 @@ module PayWithMe
       new(supported_systems, allowed_options).make_configs(&block)
     end
 
+    def self.from_yaml_file(supported_systems, allowed_options, path_to_config)
+      yaml = YAML.load_file(path_to_config)
+      make_configs(supported_systems, allowed_options) do |c|
+        yaml.each do |payment_system, options|
+          c.configure(payment_system) do |ps|
+            options.each do |k, v|
+              ps.send k, v
+            end
+          end
+        end
+      end
+    end
+
     def initialize(supported_systems, allowed_options)
       @supported_systems = supported_systems
       @allowed_options = allowed_options
