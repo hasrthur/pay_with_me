@@ -47,6 +47,26 @@ describe PayWithMe do
         end
       end.to raise_error PayWithMe::UnsupportedConfigurationOption, /dumb_option/
     end
+
+    it 'allows to reconfigure payment system after it was already configured' do
+      PayWithMe.config do |c|
+        c.configure :perfect_money do |pm|
+          pm.account_id 42
+          pm.password 'password'
+        end
+      end
+
+      PayWithMe.config do |c|
+        c.configure :perfect_money do |pm|
+          pm.password 'password-changed'
+        end
+      end
+
+      PayWithMe.config_for(:perfect_money).tap do |c|
+        expect(c.password).to eq 'password-changed'
+        expect(c.account_id).to eq 42
+      end
+    end
   end
 
   describe '.using' do

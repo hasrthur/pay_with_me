@@ -1,43 +1,36 @@
 module PayWithMe
   module Models
     class Config
-      class Dummy
-        def initialize(allowed_options)
-          @allowed_options = allowed_options
-        end
+      def self.create(allowed_options)
+        new(allowed_options).tap do |c|
+          generate_methods_for! c, with_allowed: allowed_options
 
-        def hash
-          @hash ||= {}
-        end
-
-        def configure
-          yield self
-        end
-
-        def method_missing(name, value)
-          unless @allowed_options.include? name
-            raise UnsupportedConfigurationOption, "Unsupported configuration option `#{ name }`"
-          end
-
-          hash[name] = value
+          yield c if block_given?
         end
       end
 
-      def self.create(allowed_options, &block)
-        dummy = Dummy.new(allowed_options)
-        dummy.configure &block
-
-        new(dummy.hash)
+      def self.generate_methods_for!(config, with_allowed: [])
+        with_allowed.each do |method_name|
+          config.instance_eval <<-METHOD, __FILE__, __LINE__ + 1
+              def #{ method_name }(value = nil)      # def account_id(value = nil)
+                if value                             #   if value
+                  @#{ method_name } = value          #     @account_id = value
+                else                                 #   else
+                  @#{ method_name }                  #     @account_id
+                end                                  #   end
+              end                                    # end
+          METHOD
+        end
       end
 
-      def initialize(configuration_hash)
-        @configuration_hash = configuration_hash
+      def initialize(allowed_options)
+        @allowed_options = allowed_options
       end
 
-      def method_missing(option_name, *args, &block)
-        return @configuration_hash[option_name] if @configuration_hash.key? option_name
-
-        super
+      def configure
+        yield self
+      rescue NoMethodError => e
+        raise UnsupportedConfigurationOption, "Unsupported configuration option `#{ e.name }`"
       end
     end
   end

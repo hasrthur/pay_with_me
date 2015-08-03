@@ -33,7 +33,7 @@ module PayWithMe
   @configs = {}
 
   def self.config_path=(path_to_yaml_config)
-    @configs = Configurator.from_yaml_file(supported_systems, allowed_options, path_to_yaml_config)
+    Configurator.from_yaml_file(@configs, supported_systems, allowed_options, path_to_yaml_config)
   end
 
   def self.supported?(payment_system)
@@ -52,7 +52,7 @@ module PayWithMe
   end
 
   def self.config(&block)
-    @configs = Configurator.make_configs(supported_systems, allowed_options, &block)
+    Configurator.make_configs(@configs, supported_systems, allowed_options, &block)
   end
 
   def self.config_for(payment_system)

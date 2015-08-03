@@ -1,12 +1,12 @@
 module PayWithMe
   class Configurator
-    def self.make_configs(supported_systems, allowed_options, &block)
-      new(supported_systems, allowed_options).make_configs(&block)
+    def self.make_configs(configs, supported_systems, allowed_options, &block)
+      new(configs, supported_systems, allowed_options).make_configs(&block)
     end
 
-    def self.from_yaml_file(supported_systems, allowed_options, path_to_config)
+    def self.from_yaml_file(configs, supported_systems, allowed_options, path_to_config)
       yaml = YAML.load_file(path_to_config)
-      make_configs(supported_systems, allowed_options) do |c|
+      make_configs(configs, supported_systems, allowed_options) do |c|
         yaml.each do |payment_system, options|
           c.configure(payment_system) do |ps|
             options.each do |k, v|
@@ -17,19 +17,16 @@ module PayWithMe
       end
     end
 
-    def initialize(supported_systems, allowed_options)
+    def initialize(configs, supported_systems, allowed_options)
+      @configs = configs
       @supported_systems = supported_systems
       @allowed_options = allowed_options
+
+      initialize_configs!
     end
 
     def make_configs
       yield self
-
-      configs_hash
-    end
-
-    def configs_hash
-      @configs_hash ||= {}
     end
 
     def configure(payment_system, &block)
@@ -38,7 +35,15 @@ module PayWithMe
         raise UnsupportedPaymentSystem, "Trying to configure `#{ payment_system }` which is not supported"
       end
 
-      configs_hash[payment_system] = Models::Config.create(@allowed_options[payment_system], &block)
+      @configs[payment_system].configure(&block)
+    end
+
+    private
+
+    def initialize_configs!
+      @supported_systems.each do |payment_system|
+        @configs[payment_system] ||= Models::Config.create(@allowed_options[payment_system])
+      end
     end
   end
 end

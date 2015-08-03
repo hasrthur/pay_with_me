@@ -22,7 +22,6 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency 'nokogiri', '1.6.6.2'
 
-  gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec', '~> 3.1'
   gem.add_development_dependency 'fuubar'
   gem.add_development_dependency 'vcr'
