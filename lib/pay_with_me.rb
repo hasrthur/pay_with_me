@@ -8,6 +8,7 @@ require_relative 'pay_with_me/models/response'
 require_relative 'pay_with_me/models/balance'
 require_relative 'pay_with_me/models/config'
 require_relative 'pay_with_me/models/transfer'
+require_relative 'pay_with_me/models/integrity_check'
 
 require_relative 'pay_with_me/payment_system'
 
@@ -17,6 +18,7 @@ require_relative 'pay_with_me/services/configurator'
 # PerfectMoney
 require_relative 'pay_with_me/payment_systems/perfect_money/api/balance_retriever'
 require_relative 'pay_with_me/payment_systems/perfect_money/api/transferer'
+require_relative 'pay_with_me/payment_systems/perfect_money/sci/integrity'
 
 require_relative 'pay_with_me/payment_systems/perfect_money/models/transfer'
 
@@ -26,7 +28,7 @@ module PayWithMe
   SUPPORTED_SYSTEMS = {
       :perfect_money => {
           :module          => :PerfectMoney,
-          :allowed_options => %i( account_id password payer )
+          :allowed_options => %i( account_id password payer sci_salt )
       }
   }
 

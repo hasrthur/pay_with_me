@@ -6,17 +6,29 @@ module PayWithMe
     end
 
     def balance
-      use!('BalanceRetriever').retrieve
+      use_api!('BalanceRetriever').retrieve
     end
 
     def transfer(options = {})
-      use!('Transferer').transfer(options)
+      use_api!('Transferer').transfer(options)
+    end
+    
+    def check_integrity_for(params)
+      use_sci!('Integrity').check(params)
     end
 
     private
 
-    def use!(name)
-      path = "PayWithMe::PaymentSystems::#{ @payment_system_scope }::Api::#{ name }"
+    def use_api!(name)
+      get_obj(name, :api)
+    end
+    
+    def use_sci!(name)
+      get_obj(name, :sci)
+    end
+    
+    def get_obj(name, type = :api)
+      path = "PayWithMe::PaymentSystems::#{ @payment_system_scope }::#{ type.to_s.capitalize! }::#{ name }"
       Object.const_get(path).new(@config)
     end
   end

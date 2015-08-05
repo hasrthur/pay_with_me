@@ -18,6 +18,7 @@ RSpec.configure do |config|
       c.configure :perfect_money do |pm|
         pm.account_id 42
         pm.password 'password'
+        pm.sci_salt 'm9O2768ZuMFVvWphuPJVJJfRX'
       end
     end
   end
