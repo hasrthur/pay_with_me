@@ -11,13 +11,15 @@ module PayWithMe
 
           def retrieve
             PayWithMe::Models::Balance.new do |b|
-              if error = nokogiri_doc.at_xpath('//input[@name="ERROR"]/@value')
-                b.error! error.value
-              else
-                nokogiri_doc.xpath('//input').each do |input|
-                  account = input.attributes['name'].value
-                  balance = input.attributes['value'].value.to_f
-                  b.account account, with_balance: balance
+              with_nokogiri_doc(response) do |nokogiri_doc|
+                if (error = nokogiri_doc.at_xpath('//input[@name="ERROR"]/@value'))
+                  b.error! error.value
+                else
+                  nokogiri_doc.xpath('//input').each do |input|
+                    account = input.attributes['name'].value
+                    balance = input.attributes['value'].value.to_f
+                    b.account account, with_balance: balance
+                  end
                 end
               end
             end
@@ -26,11 +28,7 @@ module PayWithMe
           private
 
           def response
-            return @response if defined? @response
-
-            uri = URI(ENDPOINT)
-            uri.query = URI.encode_www_form(params)
-            @response =  Net::HTTP.get_response(uri)
+            Net::HTTP.get_response(URI(ENDPOINT).tap { |uri| uri.query = URI.encode_www_form(params) })
           end
 
           def params
@@ -40,8 +38,8 @@ module PayWithMe
             }
           end
 
-          def nokogiri_doc
-            @nokogiri_doc ||= Nokogiri::HTML(response.body)
+          def with_nokogiri_doc(response)
+            yield Nokogiri::HTML(response.body)
           end
         end
       end
