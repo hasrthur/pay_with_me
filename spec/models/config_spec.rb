@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 describe PayWithMe::Models::Config do
   subject(:config) do
-    described_class.create %i( option_1 ) do |c|
+    described_class.create %i[option_1] do |c|
       c.option_1 'option_1'
     end
   end

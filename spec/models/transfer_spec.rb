@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe PayWithMe::Models::Transfer do
   let(:payer_account)  { double }
   let(:payee_account)  { double }

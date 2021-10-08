@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module PayWithMe
   module PaymentSystems
     module PerfectMoney
       module Api
         class BalanceRetriever
-          ENDPOINT = 'https://perfectmoney.is/acct/balance.asp'.freeze
+          ENDPOINT = 'https://perfectmoney.is/acct/balance.asp'
 
           def initialize(config)
             @config = config
@@ -30,13 +32,13 @@ module PayWithMe
 
             uri = URI(ENDPOINT)
             uri.query = URI.encode_www_form(params)
-            @response =  Net::HTTP.get_response(uri)
+            @response = Net::HTTP.get_response(uri)
           end
 
           def params
             {
-                :AccountID  => @config.account_id,
-                :PassPhrase => @config.password
+              AccountID: @config.account_id,
+              PassPhrase: @config.password
             }
           end
 

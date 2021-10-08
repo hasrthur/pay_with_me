@@ -1,18 +1,20 @@
+# frozen_string_literal: true
+
 module PayWithMe
   module PaymentSystems
     module PerfectMoney
       module Api
         class Transferer
-          ENDPOINT = 'https://perfectmoney.is/acct/confirm.asp'.freeze
+          ENDPOINT = 'https://perfectmoney.is/acct/confirm.asp'
           MAPPING = {
-              'Payer_Account'      => :payer_account,
-              'Payee_Account'      => :payee_account,
-              'Payee_Account_Name' => :payee_account_name,
-              'PAYMENT_AMOUNT'     => :amount,
-              'PAYMENT_BATCH_NUM'  => :transaction_id,
-              'PAYMENT_ID'         => :payment_id,
-              'code'               => :code,
-              'Period'             => :period
+            'Payer_Account' => :payer_account,
+            'Payee_Account' => :payee_account,
+            'Payee_Account_Name' => :payee_account_name,
+            'PAYMENT_AMOUNT' => :amount,
+            'PAYMENT_BATCH_NUM' => :transaction_id,
+            'PAYMENT_ID' => :payment_id,
+            'code' => :code,
+            'Period' => :period
           }.freeze
 
           def initialize(config)
@@ -55,7 +57,7 @@ module PayWithMe
                   value = input.attributes['value'].value
                   value = value.to_f if translated_name == :amount
 
-                  t.send "#{ translated_name }!", value
+                  t.send "#{translated_name}!", value
                 end
               end
             end
@@ -70,8 +72,8 @@ module PayWithMe
 
           def params
             {
-                :AccountID  => @config.account_id,
-                :PassPhrase => @config.password
+              AccountID: @config.account_id,
+              PassPhrase: @config.password
             }.merge!(@additional_params)
           end
 

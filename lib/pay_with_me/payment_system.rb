@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PayWithMe
   class PaymentSystem
     def initialize(payment_system_scope, config)
@@ -12,7 +14,7 @@ module PayWithMe
     def transfer(options = {})
       use_api!('Transferer').transfer(options)
     end
-    
+
     def check_integrity_for(params)
       use_sci!('Integrity').check(params)
     end
@@ -22,13 +24,13 @@ module PayWithMe
     def use_api!(name)
       get_obj(name, :api)
     end
-    
+
     def use_sci!(name)
       get_obj(name, :sci)
     end
-    
+
     def get_obj(name, type = :api)
-      path = "PayWithMe::PaymentSystems::#{ @payment_system_scope }::#{ type.to_s.capitalize! }::#{ name }"
+      path = "PayWithMe::PaymentSystems::#{@payment_system_scope}::#{type.to_s.capitalize!}::#{name}"
       Object.const_get(path).new(@config)
     end
   end

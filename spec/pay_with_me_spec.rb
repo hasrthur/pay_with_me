@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe PayWithMe do
   describe '.supported?' do
     it 'returns true for Perfect Money' do
@@ -81,7 +83,7 @@ describe PayWithMe do
     end
 
     it 'allows to use block with payment system passed as argument' do
-      expect {|b| PayWithMe.using(:perfect_money, &b) }.to yield_with_args PayWithMe::PaymentSystem
+      expect { |b| PayWithMe.using(:perfect_money, &b) }.to yield_with_args PayWithMe::PaymentSystem
     end
   end
 
@@ -103,18 +105,26 @@ describe PayWithMe do
 
     context 'invalid yaml file' do
       context 'with unsupported payment system' do
-        let(:config_path) { File.expand_path('pay_with_me_with_unsupported_payment_system.yaml', File.dirname(__FILE__)) }
+        let(:config_path) do
+          File.expand_path('pay_with_me_with_unsupported_payment_system.yaml', File.dirname(__FILE__))
+        end
 
         it 'raises UnsupportedPaymentSystem' do
-          expect { PayWithMe.config_path = config_path }.to raise_error PayWithMe::UnsupportedPaymentSystem, /liberty_reserve/
+          expect do
+            PayWithMe.config_path = config_path
+          end.to raise_error PayWithMe::UnsupportedPaymentSystem, /liberty_reserve/
         end
       end
 
       context 'with unsupported config option' do
-        let(:config_path) { File.expand_path('pay_with_me_with_unsupported_config_option.yaml', File.dirname(__FILE__)) }
+        let(:config_path) do
+          File.expand_path('pay_with_me_with_unsupported_config_option.yaml', File.dirname(__FILE__))
+        end
 
         it 'raises UnsupportedConfigurationOption' do
-          expect { PayWithMe.config_path = config_path }.to raise_error PayWithMe::UnsupportedConfigurationOption, /unsupported_option/
+          expect do
+            PayWithMe.config_path = config_path
+          end.to raise_error PayWithMe::UnsupportedConfigurationOption, /unsupported_option/
         end
       end
     end
