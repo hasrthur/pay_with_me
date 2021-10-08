@@ -23,6 +23,9 @@ require_relative 'pay_with_me/payment_systems/perfect_money/sci/integrity'
 require_relative 'pay_with_me/payment_systems/perfect_money/models/transfer'
 
 module PayWithMe
+  class UnsupportedPaymentSystem < NameError; end
+  class UnsupportedConfigurationOption < NameError; end
+
   # key here is the shorthand which will be used by users of the gem
   # value is the module name for the payment system
   SUPPORTED_SYSTEMS = {
@@ -44,7 +47,7 @@ module PayWithMe
 
   # this is used to return only the available payment systems by their shorthand
   def self.supported_systems
-    @supported_sytems ||= SUPPORTED_SYSTEMS.keys
+    @supported_systems ||= SUPPORTED_SYSTEMS.keys
   end
 
   def self.allowed_options
@@ -70,14 +73,11 @@ module PayWithMe
 
   def self.using(payment_system)
     unless SUPPORTED_SYSTEMS.key?(payment_system)
-      raise UnsupportedPaymentSystem, "Trying to use unsupported payment system #{ payment_system  }"
+      raise UnsupportedPaymentSystem, "Trying to use unsupported payment system #{payment_system}"
     end
 
     PaymentSystem.new(SUPPORTED_SYSTEMS[payment_system][:module], config_for(payment_system)).tap do |ps|
       yield ps if block_given?
     end
   end
-
-  class UnsupportedPaymentSystem < NameError; end
-  class UnsupportedConfigurationOption < NameError; end
 end

@@ -16,7 +16,6 @@ module PayWithMe
           }.freeze
 
           def initialize(config)
-            @additional_params = {}
             @config = config
           end
 
@@ -28,55 +27,53 @@ module PayWithMe
                        code: nil,
                        period: nil)
 
-            @nokogiri_doc = nil
-            @additional_params = {} # clear params in case this object is used to pay e.g. in loop
-            @additional_params.merge!(Payer_Account: from,
-                                      Payee_Account: to,
-                                      Amount: amount,
-                                      Memo: memo,
-                                      PAYMENT_ID: payment_id,
-                                      code: code,
-                                      Period: period)
-
-            build_model
+            build_model(Payer_Account: from,
+                        Payee_Account: to,
+                        Amount: amount,
+                        Memo: memo,
+                        PAYMENT_ID: payment_id,
+                        code: code,
+                        Period: period)
           end
 
           private
 
-          def build_model
+          def build_model(additional_params = {})
             Models::Transfer.new do |t|
-              if error = nokogiri_doc.at_xpath('//input[@name="ERROR"]/@value')
-                t.error! error.value
-              else
-                nokogiri_doc.xpath('//input').each do |input|
-                  translated_name = MAPPING[input.attributes['name'].value]
-                  next unless translated_name
+              with_nokogiri_doc(response(additional_params)) do |nokogiri_doc|
+                if (error = nokogiri_doc.at_xpath('//input[@name="ERROR"]/@value'))
+                  t.error! error.value
+                else
+                  nokogiri_doc.xpath('//input').each do |input|
+                    translated_name = MAPPING[input.attributes['name'].value]
+                    next unless translated_name
 
-                  value = input.attributes['value'].value
-                  value = value.to_f if translated_name == :amount
+                    value = input.attributes['value'].value
+                    value = value.to_f if translated_name == :amount
 
-                  t.send "#{ translated_name }!", value
+                    t.send "#{ translated_name }!", value
+                  end
                 end
               end
             end
           end
 
-          def response
-            return @response if defined? @response
-
-            uri = URI(ENDPOINT)
-            Net::HTTP.post_form(uri, params)
+          def response(additional_params)
+            Net::HTTP.post_form(
+              URI(ENDPOINT),
+              params.merge(additional_params)
+            )
           end
 
           def params
             {
                 :AccountID  => @config.account_id,
                 :PassPhrase => @config.password
-            }.merge!(@additional_params)
+            }
           end
 
-          def nokogiri_doc
-            @nokogiri_doc ||= Nokogiri::HTML(response.body)
+          def with_nokogiri_doc(response)
+            yield Nokogiri::HTML(response.body)
           end
         end
       end
