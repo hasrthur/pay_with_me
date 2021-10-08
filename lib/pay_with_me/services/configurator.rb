@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PayWithMe
   class Configurator
     def self.make_configs(configs, supported_systems, allowed_options, &block)
@@ -32,7 +34,7 @@ module PayWithMe
     def configure(payment_system, &block)
       payment_system = payment_system.to_sym
       unless @supported_systems.include?(payment_system)
-        raise UnsupportedPaymentSystem, "Trying to configure `#{ payment_system }` which is not supported"
+        raise UnsupportedPaymentSystem, "Trying to configure `#{payment_system}` which is not supported"
       end
 
       @configs[payment_system].configure(&block)

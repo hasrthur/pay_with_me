@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'nokogiri'
 
@@ -26,11 +28,11 @@ module PayWithMe
   # key here is the shorthand which will be used by users of the gem
   # value is the module name for the payment system
   SUPPORTED_SYSTEMS = {
-      :perfect_money => {
-          :module          => :PerfectMoney,
-          :allowed_options => %i( account_id password payer sci_salt )
-      }
-  }
+    perfect_money: {
+      module: :PerfectMoney,
+      allowed_options: %i[account_id password payer sci_salt]
+    }
+  }.freeze
 
   @configs = {}
 
@@ -70,7 +72,7 @@ module PayWithMe
 
   def self.using(payment_system)
     unless SUPPORTED_SYSTEMS.key?(payment_system)
-      raise UnsupportedPaymentSystem, "Trying to use unsupported payment system #{ payment_system  }"
+      raise UnsupportedPaymentSystem, "Trying to use unsupported payment system #{payment_system}"
     end
 
     PaymentSystem.new(SUPPORTED_SYSTEMS[payment_system][:module], config_for(payment_system)).tap do |ps|
@@ -79,5 +81,6 @@ module PayWithMe
   end
 
   class UnsupportedPaymentSystem < NameError; end
+
   class UnsupportedConfigurationOption < NameError; end
 end

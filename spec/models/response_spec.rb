@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe PayWithMe::Models::Response do
   let(:response) { Class.new(described_class).new }
 
@@ -7,7 +9,7 @@ describe PayWithMe::Models::Response do
     it { is_expected.to be true }
 
     it 'allows to call block' do
-      expect {|b| response.succeed?(&b) }.to yield_with_args(response)
+      expect { |b| response.succeed?(&b) }.to yield_with_args(response)
     end
 
     context '#failed?' do
@@ -24,7 +26,7 @@ describe PayWithMe::Models::Response do
     it { is_expected.to be true }
 
     it 'allows to call block' do
-      expect {|b| response.failed?(&b) }.to yield_with_args(response)
+      expect { |b| response.failed?(&b) }.to yield_with_args(response)
     end
 
     context '#succeed?' do

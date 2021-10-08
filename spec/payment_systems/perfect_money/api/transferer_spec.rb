@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 describe PayWithMe::PaymentSystems::PerfectMoney::Api::Transferer do
   subject(:transfer) { PayWithMe.using(:perfect_money).transfer(options) }
 
-  context 'valid request', vcr: {cassette_name: 'perfect_money/transfer/valid'} do
+  context 'valid request', vcr: { cassette_name: 'perfect_money/transfer/valid' } do
     let(:options) do
       {
-          to: 'U9999999',
-          from: 'U9999999',
-          amount: 0.01,
-          payment_id: 42,
-          memo: 'somememo',
+        to: 'U9999999',
+        from: 'U9999999',
+        amount: 0.01,
+        payment_id: 42,
+        memo: 'somememo'
       }
     end
 
@@ -27,7 +29,7 @@ describe PayWithMe::PaymentSystems::PerfectMoney::Api::Transferer do
     end
   end
 
-  context 'invalid request', vcr: {cassette_name: 'perfect_money/transfer/invalid'} do
+  context 'invalid request', vcr: { cassette_name: 'perfect_money/transfer/invalid' } do
     let(:options) do
       {
         to: 42,

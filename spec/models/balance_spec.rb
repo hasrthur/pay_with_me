@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe PayWithMe::Models::Balance do
   let(:account_1) { 'account_1' }
   let(:balance_1) { 100.0 }

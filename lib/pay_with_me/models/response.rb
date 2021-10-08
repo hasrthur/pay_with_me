@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PayWithMe
   module Models
     class Response
@@ -12,7 +14,7 @@ module PayWithMe
           yield self if success && block_given?
         end
       end
-      alias_method :ok?, :succeed?
+      alias ok? succeed?
 
       def failed?
         (!succeed?).tap do |fail|
